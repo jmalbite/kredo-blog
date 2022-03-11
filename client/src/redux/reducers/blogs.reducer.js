@@ -1,29 +1,28 @@
 import { actions } from '../actionsconstant';
 
-export const blogs_data = (blogs = [], action) => {
+export const blogs = (blogs = [], action) => {
   switch (action.type) {
-    case actions.ADD:
+    case actions.FETCH_ALL:
       return (blogs = action.payload);
-    case actions.UPDATE:
+    case actions.ADD:
+      console.log(action);
       return (blogs = {
         ...blogs,
         title: action.payload.title,
         content: action.payload.contentt,
       });
     case actions.DELETE:
-      return blogs.filter((blog) => {
-        return blog.blogID !== action.payload.blogID;
-      });
+      return blogs.filter((blog) => blog.blogID !== action.payload);
     default:
       return blogs;
   }
 };
 
-export const blog_found = (blog = [], action) => {
+export const blog_found = (blogs = [], action) => {
   switch (action.type) {
     case actions.SEARCH:
-      return (blog = action.payload);
+      return blogs.filter((blog) => blog.blogID === action.payload);
     default:
-      return blog;
+      return blogs;
   }
 };

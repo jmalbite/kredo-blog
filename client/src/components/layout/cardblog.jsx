@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import EditBlog from '../forms/editblog';
-
 import {
   Dialog,
   DialogTitle,
@@ -17,8 +16,18 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import CloseIcon from '@mui/icons-material/Close';
 
-const CardBlog = () => {
+import { useDispatch, useSelector } from 'react-redux';
+import { removeBlog } from '../../redux/actions/blogs.action';
+
+const CardBlog = ({ title, content, blogID }) => {
+  const dispatch = useDispatch();
+  const blogs = useSelector((state) => state.blogs);
   const [open, setOpen] = useState(false);
+
+  const deleteBlog = () => {
+    dispatch(removeBlog(blogID));
+    console.log(blogs);
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -27,22 +36,17 @@ const CardBlog = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const blog = {
-    title: 'Reprehenderit incidi',
-    message:
-      'Qui hic reprehenderit provident, aliquip alias ut consequuntur sunt a et ipsum quas saepe labore commodo et quas corporis eiusmod consequatur? Nesciunt, dicta incidunt, delectus, quasi soluta irure facere accusamus qui non rerum rerum officia laborum in consequatur? Rerum fuga. Cum sit quo iusto quo aut alias blanditiis ut ipsam consectetur cillum atque veritatis quasi culpa ab voluptatem, laboris nulla sed nobis reprehenderit, distinctio. Nostrud officia qui laboris mollitia amet, lorem cupidatat voluptas est, a in quaerat sint molestiae elit, tempore, recusandae. Amet, reiciendis consequatur? Velit in ipsum, eum aut ut commodi numquam perspiciatis, reiciendis accusantium ipsum, officia praesentium amet, praesentium blanditiis in omnis voluptates doloribus quisquam adipisicing voluptas im.',
-  };
 
   return (
     <Grid item lg={4} xl={4} sm={12} md={6} xs={12}>
       <Card>
         <CardMedia component="img" height="140" image="https://via.placeholder.com/600/771796" alt="green iguana" />
-        <CardContent>
+        <CardContent sx={{ height: '300px' }}>
           <Typography gutterBottom variant="h5" component="div">
-            {blog.title}
+            {title}
           </Typography>
           <Typography paragraph={true} variant="body2" color="text.secondary">
-            {blog.message}
+            {content}
           </Typography>
         </CardContent>
         <CardActions>
@@ -68,12 +72,19 @@ const CardBlog = () => {
                     <CloseIcon />
                   </IconButton>
                 </DialogTitle>
-                <EditBlog titleBlog={blog.title} contentBlog={blog.message} />
+                <EditBlog titleBlog={title} contentBlog={content} />
               </Dialog>
             </Grid>
 
             <Grid item>
-              <Button fullWidth variant="outlined" size="small" color="secondary" startIcon={<DeleteRoundedIcon />}>
+              <Button
+                onClick={deleteBlog}
+                fullWidth
+                variant="outlined"
+                size="small"
+                color="secondary"
+                startIcon={<DeleteRoundedIcon />}
+              >
                 Delete
               </Button>
             </Grid>

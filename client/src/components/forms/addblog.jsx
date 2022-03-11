@@ -5,12 +5,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { useDispatch } from 'react-redux';
+import { createBlog } from '../../redux/actions/blogs.action';
+
 const schema = yup.object().shape({
   title: yup.string().required(),
   content: yup.string().required(),
 });
 
 const AddBlog = () => {
+  const dispatch = useDispatch();
   const methods = useForm({ resolver: yupResolver(schema) });
 
   function clearData() {
@@ -21,7 +25,8 @@ const AddBlog = () => {
   }
 
   const saveBlog = (data) => {
-    console.log(data);
+    dispatch(createBlog(data));
+    clearData();
   };
 
   return (
