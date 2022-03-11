@@ -34,7 +34,7 @@ const CardBlog = () => {
   };
 
   return (
-    <Grid item lg={4} xl={4} sm={6} md={6} xs={12}>
+    <Grid item lg={4} xl={4} sm={12} md={6} xs={12}>
       <Card>
         <CardMedia component="img" height="140" image="https://via.placeholder.com/600/771796" alt="green iguana" />
         <CardContent>
@@ -59,7 +59,7 @@ const CardBlog = () => {
                 Edit
               </Button>
 
-              <Dialog open={open} onClose={handleClose}>
+              <Dialog open={open} onClose={handleClose} maxWidth="sm">
                 <DialogTitle
                   sx={{ display: 'flex', justifyContent: 'space-between', margin: 0, padding: 2, paddingBottom: 0 }}
                 >
