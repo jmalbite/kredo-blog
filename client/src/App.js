@@ -1,10 +1,13 @@
+import NavigationBar from './components/layout/navigationbar';
+import BlogPosts from './components/layout/blogposts';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <h1>sdfsfssdfyey</h1>
-    </div>
+    <>
+      <NavigationBar />
+      <BlogPosts />
+    </>
   );
 }
 
