@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import BlogPic from '../../assets/blog-pic.jpg';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -40,7 +41,7 @@ const CardBlog = ({ title, content, blogID }) => {
   return (
     <Grid item lg={4} xl={4} sm={12} md={6} xs={12}>
       <Card>
-        <CardMedia component="img" height="140" image="https://via.placeholder.com/600/771796" alt="green iguana" />
+        <CardMedia component="img" height="140" image={BlogPic} alt="green iguana" />
         <CardContent sx={{ height: '300px' }}>
           <Typography gutterBottom variant="h5" component="div">
             {title}
