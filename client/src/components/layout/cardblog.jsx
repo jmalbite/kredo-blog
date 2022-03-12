@@ -17,17 +17,15 @@ import BlogPic from '../../assets/blog-pic.jpg';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { removeBlog } from '../../redux/actions/blogs.action';
 
 const CardBlog = ({ title, content, blogID }) => {
   const dispatch = useDispatch();
-  const blogs = useSelector((state) => state.blogs);
   const [open, setOpen] = useState(false);
 
   const deleteBlog = () => {
     dispatch(removeBlog(blogID));
-    console.log(blogs);
   };
 
   const handleOpen = () => {

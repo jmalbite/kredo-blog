@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import InputTextField from '../interfaces/inputtextfield';
-import { Grid, Button } from '@mui/material';
+import Loader from '../response/loader';
+import { Grid, Button, Typography } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogin } from '../../redux/actions/auth.action';
+import { useState } from 'react';
 
 const schema = yup.object().shape({
   username: yup.string().required(),
@@ -12,17 +16,27 @@ const schema = yup.object().shape({
 
 const LoginForm = () => {
   const methods = useForm({ resolver: yupResolver(schema) });
+  const dispatch = useDispatch();
+  const isValid = useSelector((state) => state.errorLogin);
 
-  function clearData() {
-    methods.reset({
-      username: '',
-      password: '',
-    });
-  }
+  const [invalidCreds, setInvalidCreds] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const loginAccount = (data) => {
-    console.log(data);
-    clearData();
+  useEffect(() => {
+    setIsLoading(false);
+    setInvalidCreds(isValid);
+  }, [isValid]);
+
+  // function clearData() {
+  //   methods.reset({
+  //     username: '',
+  //     password: '',
+  //   });
+  // }
+
+  const loginAccount = (credentials) => {
+    dispatch(userLogin(credentials));
+    setIsLoading(true);
   };
 
   return (
@@ -38,6 +52,15 @@ const LoginForm = () => {
               <InputTextField label="Password" name="password" type="password" />
             </Grid>
 
+            {invalidCreds ? (
+              <Grid item sm={12} lg={12}>
+                <Typography variant="subtitle2" color="red">
+                  username or password is not correct
+                </Typography>
+              </Grid>
+            ) : null}
+
+            <Loader open={isLoading} />
             <Grid item sm={12} lg={12}>
               <Button type="submit" variant="contained" color="primary" fullWidth>
                 Login

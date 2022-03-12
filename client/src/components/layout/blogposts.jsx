@@ -7,18 +7,17 @@ import { getAllBlogs } from '../../redux/actions/blogs.action';
 
 const BlogPosts = () => {
   const dispatch = useDispatch();
+  const blogs = useSelector((state) => state.blogs);
 
   useEffect(() => {
     dispatch(getAllBlogs());
   }, [dispatch]);
 
-  const blogs = useSelector((state) => state.blogs);
-
   return (
     <Container maxWidth="lg" style={{ marginTop: '30px' }}>
       <Grid container item sm={12} spacing={3}>
         {blogs.map((blog) => (
-          <CardBlog key={blog.id} blogID={blog.id} title={blog.title} content={blog.body} />
+          <CardBlog key={blog.id} blogID={blog.id} title={blog.title} content={blog.content} />
         ))}
       </Grid>
     </Container>

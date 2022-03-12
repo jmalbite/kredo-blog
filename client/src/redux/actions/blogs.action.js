@@ -15,8 +15,10 @@ export const getAllBlogs = () => async (dispatch) => {
 export const createBlog = (newBlog) => async (dispatch) => {
   try {
     //
-    await api.addBlog(newBlog);
-    dispatch({ type: actions.ADD, payload: newBlog });
+    const res = await api.addBlog(newBlog);
+
+    console.log(res.data);
+    dispatch({ type: actions.ADD, payload: res.data });
     //
   } catch (error) {
     console.error(error);

@@ -5,14 +5,16 @@ export const blogs = (blogs = [], action) => {
     case actions.FETCH_ALL:
       return (blogs = action.payload);
     case actions.ADD:
-      console.log(action);
-      return (blogs = {
+      return (blogs = [
         ...blogs,
-        title: action.payload.title,
-        content: action.payload.contentt,
-      });
+        {
+          id: action.payload.id,
+          title: action.payload.title,
+          content: action.payload.content,
+        },
+      ]);
     case actions.DELETE:
-      return blogs.filter((blog) => blog.blogID !== action.payload);
+      return (blogs = blogs.filter((blog) => blog.id !== action.payload));
     default:
       return blogs;
   }
@@ -21,8 +23,32 @@ export const blogs = (blogs = [], action) => {
 export const blog_found = (blogs = [], action) => {
   switch (action.type) {
     case actions.SEARCH:
-      return blogs.filter((blog) => blog.blogID === action.payload);
+      return (blogs = action.payload);
     default:
       return blogs;
+  }
+};
+
+export const user = (user = [], action) => {
+  switch (action.type) {
+    case actions.USERLOGIN:
+      return (user = action.payload);
+    case actions.USER_LOGOUT:
+      return (user = []);
+    default:
+      return user;
+  }
+};
+
+export const errorLogin = (errorLogin = false, action) => {
+  switch (action.type) {
+    case actions.ERROR_LOGIN:
+      return action.payload.message === 'Invalid Credentials' ? (errorLogin = true) : null;
+    case actions.SUCCESS_LOGIN:
+      return (errorLogin = false);
+    case actions.RESET_STATUS:
+      return (errorLogin = false);
+    default:
+      return errorLogin;
   }
 };

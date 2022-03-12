@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
   Box,
@@ -14,15 +14,24 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { useSelector, useDispatch } from 'react-redux';
+import { userLogout } from '../../redux/actions/auth.action';
 
 import LoginForm from '../forms/login';
 import AddBlog from '../forms/addblog';
 
 const NavigationBar = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [blog, setBlog] = useState(false);
   const menu = Boolean(anchorEl);
+
+  useEffect(() => {
+    console.log(user);
+    if (user.length) setOpen(false);
+  }, [user]);
 
   const openBlog = () => {
     setBlog(true);
@@ -47,6 +56,10 @@ const NavigationBar = () => {
 
   const closeMenu = () => {
     setAnchorEl(null);
+  };
+
+  const logoutUser = () => {
+    dispatch(userLogout());
   };
 
   return (
@@ -87,9 +100,15 @@ const NavigationBar = () => {
             Blogs{' '}
           </Typography>
 
-          <Button onClick={handleOpen} color="inherit">
-            Login
-          </Button>
+          {!user.length ? (
+            <Button onClick={handleOpen} color="inherit">
+              Login
+            </Button>
+          ) : (
+            <Button onClick={logoutUser} color="inherit">
+              Logout
+            </Button>
+          )}
           <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
             <DialogTitle
               sx={{ display: 'flex', justifyContent: 'space-between', margin: 0, padding: 2, paddingBottom: 0 }}
