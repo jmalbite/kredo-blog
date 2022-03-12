@@ -4,13 +4,16 @@ import { Grid, Button, Paper } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { editBlog } from '../../redux/actions/blogs.action';
 
 const schema = yup.object().shape({
   title: yup.string().required(),
   content: yup.string().required(),
 });
 
-const EditBlog = ({ titleBlog, contentBlog }) => {
+const EditBlog = ({ titleBlog, contentBlog, blogID }) => {
+  const dispatch = useDispatch();
   const methods = useForm({ resolver: yupResolver(schema) });
 
   useEffect(() => {
@@ -26,8 +29,10 @@ const EditBlog = ({ titleBlog, contentBlog }) => {
   }
 
   const updateBlog = (data) => {
-    console.log(data);
+    dispatch(editBlog(blogID, data));
+    clearData();
   };
+
   return (
     <FormProvider {...methods}>
       <Paper elevation={1} style={{ padding: 20 }}>

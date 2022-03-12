@@ -18,12 +18,12 @@ export const userLogin = (userCredentials) => async (dispatch) => {
         ];
         localStorage.setItem('auth_token', res.data.token);
         localStorage.setItem('auth_name', res.data.user.username);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
 
         dispatch({ type: actions.USERLOGIN, payload: data });
         dispatch({ type: actions.SUCCESS_LOGIN });
       })
       .catch((error) => {
-        //console.log(error.response.data);
         dispatch({ type: actions.ERROR_LOGIN, payload: error.response.data });
       });
   });
@@ -33,13 +33,22 @@ export const userLogout = () => async (dispatch) => {
   axios
     .post(logoutURL)
     .then((res) => {
-      console.log(res);
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_name');
+      localStorage.removeItem('user');
       dispatch({ type: actions.USER_LOGOUT });
     })
     .catch((error) => {
       //console.log(error.response.data);
       //dispatch({ type: actions.ERROR_LOGIN, payload: error.response.data });
     });
+};
+
+export const persistentLogin = (user) => {
+  return {
+    type: actions.PERSISTENT,
+    payload: user,
+  };
 };
 
 export const resetLoginStatus = () => {

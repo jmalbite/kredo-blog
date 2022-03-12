@@ -27,16 +27,11 @@ const LoginForm = () => {
     setInvalidCreds(isValid);
   }, [isValid]);
 
-  // function clearData() {
-  //   methods.reset({
-  //     username: '',
-  //     password: '',
-  //   });
-  // }
-
   const loginAccount = (credentials) => {
     dispatch(userLogin(credentials));
     setIsLoading(true);
+
+    if (invalidCreds) setIsLoading(false);
   };
 
   return (

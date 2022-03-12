@@ -12,10 +12,10 @@ import {
   MenuItem,
 } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
-import MenuIcon from '@mui/icons-material/Menu';
+import AddCardIcon from '@mui/icons-material/AddCard';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useSelector, useDispatch } from 'react-redux';
-import { userLogout } from '../../redux/actions/auth.action';
+import { userLogout, persistentLogin, resetLoginStatus } from '../../redux/actions/auth.action';
 
 import LoginForm from '../forms/login';
 import AddBlog from '../forms/addblog';
@@ -29,8 +29,16 @@ const NavigationBar = () => {
   const menu = Boolean(anchorEl);
 
   useEffect(() => {
+    const local = JSON.parse(localStorage.getItem('user'));
+    if (local !== null) dispatch(persistentLogin(local));
     console.log(user);
-    if (user.length) setOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      setOpen(false);
+    }
   }, [user]);
 
   const openBlog = () => {
@@ -48,6 +56,7 @@ const NavigationBar = () => {
 
   const handleClose = () => {
     setOpen(false);
+    dispatch(resetLoginStatus());
   };
 
   const openMenu = (event) => {
@@ -66,10 +75,10 @@ const NavigationBar = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton onClick={openMenu} size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
+          <IconButton onClick={openBlog} size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+            <AddCardIcon color="inherit" />
           </IconButton>
-          <Menu
+          {/* <Menu
             open={menu}
             anchorEl={anchorEl}
             onClose={closeMenu}
@@ -82,9 +91,9 @@ const NavigationBar = () => {
                 <AddCircleIcon color="secondary" /> ADD BLOG
               </Typography>{' '}
             </MenuItem>
-          </Menu>
+          </Menu> */}
 
-          <Dialog open={blog} onClose={closeBlog} maxWidth="lg">
+          <Dialog open={blog} onClose={closeBlog} maxWidth="sm">
             <DialogTitle
               sx={{ display: 'flex', justifyContent: 'space-between', margin: 0, padding: 2, paddingBottom: 0 }}
             >
@@ -100,15 +109,16 @@ const NavigationBar = () => {
             Blogs{' '}
           </Typography>
 
-          {!user.length ? (
-            <Button onClick={handleOpen} color="inherit">
-              Login
-            </Button>
-          ) : (
+          {user ? (
             <Button onClick={logoutUser} color="inherit">
               Logout
             </Button>
+          ) : (
+            <Button onClick={handleOpen} color="inherit">
+              Login
+            </Button>
           )}
+
           <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
             <DialogTitle
               sx={{ display: 'flex', justifyContent: 'space-between', margin: 0, padding: 2, paddingBottom: 0 }}

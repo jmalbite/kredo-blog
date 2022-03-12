@@ -39,7 +39,7 @@ const AddBlog = () => {
             </Grid>
 
             <Grid item sm={12} lg={12}>
-              <InputTextField label="Blog Content" name="content" type="text" multiline={true} rows={15} />
+              <InputTextField label="Blog Content" name="content" type="text" multiline={true} rows={10} />
             </Grid>
 
             <Grid item sm={12} lg={12}>

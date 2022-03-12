@@ -17,7 +17,6 @@ export const createBlog = (newBlog) => async (dispatch) => {
     //
     const res = await api.addBlog(newBlog);
 
-    console.log(res.data);
     dispatch({ type: actions.ADD, payload: res.data });
     //
   } catch (error) {

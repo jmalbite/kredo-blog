@@ -13,6 +13,9 @@ export const blogs = (blogs = [], action) => {
           content: action.payload.content,
         },
       ]);
+    case actions.UPDATE:
+      return blogs.map((blog) => (blog.id === action.payload.id ? action.payload : blog));
+
     case actions.DELETE:
       return (blogs = blogs.filter((blog) => blog.id !== action.payload));
     default:
@@ -29,12 +32,14 @@ export const blog_found = (blogs = [], action) => {
   }
 };
 
-export const user = (user = [], action) => {
+export const user = (user = null, action) => {
   switch (action.type) {
     case actions.USERLOGIN:
       return (user = action.payload);
     case actions.USER_LOGOUT:
-      return (user = []);
+      return (user = null);
+    case actions.PERSISTENT:
+      return (user = action.payload);
     default:
       return user;
   }
