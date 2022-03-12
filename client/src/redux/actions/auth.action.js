@@ -3,6 +3,7 @@ import { actions } from '../actionsconstant';
 
 const loginURL = '/api/login';
 const logoutURL = '/api/logout';
+const registerURL = '/api/register';
 
 export const userLogin = (userCredentials) => async (dispatch) => {
   axios.get('/sanctum/csrf-cookie').then((response) => {
@@ -42,6 +43,21 @@ export const userLogout = () => async (dispatch) => {
       //console.log(error.response.data);
       //dispatch({ type: actions.ERROR_LOGIN, payload: error.response.data });
     });
+};
+
+export const registerUser = (userInfo) => async (dispatch) => {
+  axios.get('/sanctum/csrf-cookie').then((response) => {
+    axios
+      .post(registerURL, userInfo)
+      .then((res) => {
+        console.log('yey', res);
+        dispatch({ type: actions.REGISTER, payload: res.response.status });
+        dispatch({ type: actions.SUCCESS_LOGIN });
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  });
 };
 
 export const persistentLogin = (user) => {

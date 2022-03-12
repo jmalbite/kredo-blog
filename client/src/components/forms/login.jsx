@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputTextField from '../interfaces/inputtextfield';
 import Loader from '../response/loader';
 import { Grid, Button, Typography } from '@mui/material';
@@ -7,7 +7,6 @@ import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from '../../redux/actions/auth.action';
-import { useState } from 'react';
 
 const schema = yup.object().shape({
   username: yup.string().required(),

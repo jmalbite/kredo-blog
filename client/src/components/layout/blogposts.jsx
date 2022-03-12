@@ -22,7 +22,6 @@ const BlogPosts = () => {
 
   useEffect(() => {
     const local = JSON.parse(localStorage.getItem('user'));
-    console.log(local);
     if (local !== null) {
       dispatch(persistentLogin(local));
       setIsLogin(true);
