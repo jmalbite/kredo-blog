@@ -75,3 +75,9 @@ export const resetUserBlogs = () => {
     type: actions.RESET_USER_BLOGS,
   };
 };
+
+export const resetLoginStatus = () => {
+  return {
+    type: actions.RESET_STATUS,
+  };
+};

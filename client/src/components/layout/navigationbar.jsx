@@ -3,17 +3,27 @@ import { AppBar, Box, Toolbar, Typography, Button, IconButton, Dialog, DialogTit
 import CloseIcon from '@mui/icons-material/Close';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { userLogout, persistentLogin, resetRegistrationResponse } from '../../redux/actions/auth.action';
+import {
+  userLogout,
+  persistentLogin,
+  resetRegistrationResponse,
+  resetLoginStatus,
+} from '../../redux/actions/auth.action';
 
 import RegisterForm from '../forms/register';
 import LoginForm from '../forms/login';
 import SearchInput from '../interfaces/searchinput';
 import AddBlog from '../forms/addblog';
+import ResponseBar from '../response/responsebar';
 
 const NavigationBar = () => {
   const dispatch = useDispatch();
+  const registerResponse = useSelector((state) => state.registrationResponse);
+  const loginResponse = useSelector((state) => state.loginResponse);
   const user = useSelector((state) => state.user);
   const [register, setRegister] = useState(false);
+  const [popUp, setPopUp] = useState(false);
+  const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
   const [blog, setBlog] = useState(false);
 
@@ -23,11 +33,33 @@ const NavigationBar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  //notify if the login successful
+  useEffect(() => {
+    if (loginResponse.username) {
+      setMessage('Login Successful');
+      setPopUp(true);
+    }
+  }, [loginResponse]);
+
+  //notify if the registration successful
+  useEffect(() => {
+    if (registerResponse.statusText === 'Created') {
+      setMessage('Registration Successful');
+      closeRegister();
+      setPopUp(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [registerResponse]);
+
   useEffect(() => {
     if (user) {
       setOpen(false);
     }
   }, [user]);
+
+  const closePoup = () => {
+    setPopUp(false);
+  };
 
   const openRegister = () => {
     setRegister(true);
@@ -36,6 +68,7 @@ const NavigationBar = () => {
   const closeRegister = () => {
     //clear response status
     dispatch(resetRegistrationResponse());
+
     setRegister(false);
   };
 
@@ -58,16 +91,13 @@ const NavigationBar = () => {
 
   const logoutUser = () => {
     dispatch(userLogout());
+    dispatch(resetLoginStatus());
   };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {/* <IconButton onClick={openBlog} size="small" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <AddCardIcon color="inherit" />
-          </IconButton> */}
-
           <Dialog open={blog} onClose={closeBlog} maxWidth="sm">
             <DialogTitle
               sx={{ display: 'flex', justifyContent: 'space-between', margin: 0, padding: 2, paddingBottom: 0 }}
@@ -120,6 +150,7 @@ const NavigationBar = () => {
           )}
 
           {/* REGISTER MODAL */}
+          <ResponseBar open={popUp} message={message} handleClose={closePoup} />
           <Dialog open={register} onClose={closeRegister} maxWidth="xs" fullWidth>
             <DialogTitle
               sx={{ display: 'flex', justifyContent: 'space-between', margin: 0, padding: 2, paddingBottom: 0 }}

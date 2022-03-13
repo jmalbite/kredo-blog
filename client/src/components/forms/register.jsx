@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import InputTextField from '../interfaces/inputtextfield';
 import Loader from '../response/loader';
+
 import { Grid, Button, Typography } from '@mui/material';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../redux/actions/auth.action';
 
@@ -87,6 +90,7 @@ const RegisterForm = () => {
             </Grid>
 
             <Loader open={isLoading} />
+
             <Grid item sm={12} lg={12}>
               <Button type="submit" variant="contained" color="primary" fullWidth>
                 Register
