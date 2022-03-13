@@ -12,7 +12,9 @@ import {
   CardMedia,
   Button,
   Typography,
+  CardHeader,
 } from '@mui/material';
+import moment from 'moment';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import BlogPic from '../../assets/blog-pic.jpg';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
@@ -21,11 +23,17 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { useDispatch } from 'react-redux';
 import { removeBlog } from '../../redux/actions/blogs.action';
+import { useEffect } from 'react';
 
-const CardBlog = ({ title, content, blogID, isLogin }) => {
+const CardBlog = ({ title, content, blogID, isLogin, created, name, username }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [view, setView] = useState(false);
+  const [currentUser, setCurrentUser] = useState('');
+
+  useEffect(() => {
+    setCurrentUser(localStorage.getItem('auth_name'));
+  }, []);
 
   const deleteBlog = () => {
     dispatch(removeBlog(blogID));
@@ -50,18 +58,23 @@ const CardBlog = ({ title, content, blogID, isLogin }) => {
   return (
     <Grid item lg={4} xl={4} sm={12} md={6} xs={12}>
       <Card>
+        <CardHeader
+          sx={{ backgroundColor: '#eeeeee' }}
+          title={title}
+          subheader={moment(created).startOf('hour').fromNow()}
+        />
         <CardMedia component="img" height="140" image={BlogPic} alt="green iguana" />
         <CardContent sx={{ height: '300px', overflow: 'hidden' }}>
-          <Typography gutterBottom variant="h5" component="div">
-            {title}
+          <Typography gutterBottom variant="subtitle1" component="div">
+            Posted by: {name}
           </Typography>
           <Typography paragraph={true} variant="body2" color="text.secondary">
             {content}
           </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{ backgroundColor: '#eeeeee' }}>
           <Grid container spacing={1} justifyContent="center">
-            {isLogin ? (
+            {isLogin && username === currentUser ? (
               <Grid item>
                 <Button
                   onClick={handleOpen}
@@ -88,7 +101,7 @@ const CardBlog = ({ title, content, blogID, isLogin }) => {
               </Grid>
             ) : null}
 
-            {isLogin ? (
+            {isLogin && username === currentUser ? (
               <Grid item>
                 <Button
                   onClick={deleteBlog}

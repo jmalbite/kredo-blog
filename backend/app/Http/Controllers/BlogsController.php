@@ -29,7 +29,9 @@ class BlogsController extends Controller
         //store new blog
         $request->validate([
             'title' => 'required',
-            'content' => 'required'
+            'content' => 'required',
+            'owner_name' => 'required',
+            'owner_username' => 'required',
         ]);
 
         return Blogs::create($request->all());
@@ -90,5 +92,13 @@ class BlogsController extends Controller
     {
         //multiple research
         return Blogs::where('title', 'like', '%'.$title.'%')->get();
+    }
+
+
+    public function searchBlogUser($username)
+    {
+        //multiple research
+        //return Blogs::where('owner_username', '=', '%'.$username.'%')->get();
+        return Blogs::where('owner_username', $username)->get();
     }
 }

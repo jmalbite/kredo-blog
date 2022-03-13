@@ -12,6 +12,15 @@ export const getAllBlogs = () => async (dispatch) => {
   }
 };
 
+export const currentUserBlogs = (username) => async (dispatch) => {
+  try {
+    const { data } = await api.getUserBlogs(username);
+    dispatch({ type: actions.USER_BLOGS, payload: data });
+  } catch (error) {
+    console.log('current user blogs: ', error);
+  }
+};
+
 export const createBlog = (newBlog) => async (dispatch) => {
   try {
     //
@@ -44,4 +53,25 @@ export const removeBlog = (blogID) => async (dispatch) => {
   } catch (error) {
     console.log(error.message);
   }
+};
+
+export const searchBlog = (inputString) => async (dispatch) => {
+  try {
+    const { data } = await api.searchBlogs(inputString);
+    dispatch({ type: actions.SEARCH, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const resetSearchBlog = () => {
+  return {
+    type: actions.RESET_SEARCH,
+  };
+};
+
+export const resetUserBlogs = () => {
+  return {
+    type: actions.RESET_USER_BLOGS,
+  };
 };

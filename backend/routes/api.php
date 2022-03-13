@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogsController;
+use App\Models\Blogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,7 @@ Route::get('/blogs/search/{title}', [BlogsController::class, 'search']);
 //protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/blogs', [BlogsController::class, 'store']);
+    Route::get('/blogs/searh-user-blogs/{username}', [BlogsController::class, 'searchBlogUser']);
     Route::delete('/blogs/{id}', [BlogsController::class, 'destroy']);
     Route::put('/blogs/{id}', [BlogsController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout']);

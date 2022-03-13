@@ -5,8 +5,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createBlog } from '../../redux/actions/blogs.action';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const schema = yup.object().shape({
   title: yup.string().required(),
@@ -14,8 +16,26 @@ const schema = yup.object().shape({
 });
 
 const AddBlog = () => {
-  const dispatch = useDispatch();
   const methods = useForm({ resolver: yupResolver(schema) });
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+
+  //storing username and name //i don't know why it's undefined
+  useEffect(() => {
+    setName(user.name);
+    setUsername(user.username);
+  }, [user.name, user.username]);
+
+  //storing username and name //i don't know why it's undefined
+  useEffect(() => {
+    if (name === 'undefined' || username === undefined) {
+      setName(user[0].name);
+      setUsername(user[0].username);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, username]);
 
   function clearData() {
     methods.reset({
@@ -25,7 +45,9 @@ const AddBlog = () => {
   }
 
   const saveBlog = (data) => {
-    dispatch(createBlog(data));
+    let addDataBlog = { ...data, owner_name: name, owner_username: username };
+    console.log(addDataBlog);
+    dispatch(createBlog(addDataBlog));
     clearData();
   };
 

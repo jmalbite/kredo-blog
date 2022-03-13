@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Box, Toolbar, Typography, Button, IconButton, Dialog, DialogTitle } from '@mui/material/';
+import { AppBar, Box, Toolbar, Typography, Button, IconButton, Dialog, DialogTitle, Stack } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import { userLogout, persistentLogin, resetRegistrationResponse } from '../../re
 
 import RegisterForm from '../forms/register';
 import LoginForm from '../forms/login';
+import SearchInput from '../interfaces/searchinput';
 import AddBlog from '../forms/addblog';
 
 const NavigationBar = () => {
@@ -63,9 +64,9 @@ const NavigationBar = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton onClick={openBlog} size="small" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+          {/* <IconButton onClick={openBlog} size="small" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <AddCardIcon color="inherit" />
-          </IconButton>
+          </IconButton> */}
 
           <Dialog open={blog} onClose={closeBlog} maxWidth="sm">
             <DialogTitle
@@ -79,23 +80,42 @@ const NavigationBar = () => {
             <AddBlog />
           </Dialog>
 
+          {user ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={openBlog}
+              size="small"
+              edge="start"
+              startIcon={<AddCardIcon />}
+            >
+              Add Blog
+            </Button>
+          ) : null}
+
+          <SearchInput />
+
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Blogs{' '}
+            Kredo Blogs
           </Typography>
 
+          <Box sx={{ flexGrow: 1 }} />
+
           {user ? (
-            <Button disableRipple={true} onClick={logoutUser} color="inherit">
+            <Button variant="outlined" disableRipple={true} onClick={logoutUser} color="inherit">
               Logout
             </Button>
           ) : (
             <>
-              <Button disableRipple={true} onClick={handleOpen} color="inherit">
-                Login
-              </Button>
+              <Stack direction="row" spacing={1}>
+                <Button variant="contained" disableRipple={true} onClick={handleOpen} color="success">
+                  Login
+                </Button>
 
-              <Button disableRipple={true} onClick={openRegister} color="inherit">
-                Register
-              </Button>
+                <Button variant="outlined" disableRipple={true} onClick={openRegister} color="inherit">
+                  Register
+                </Button>
+              </Stack>
             </>
           )}
 

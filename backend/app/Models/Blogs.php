@@ -12,5 +12,7 @@ class Blogs extends Model
     protected $fillable = [
         'title',
         'content',
+        'owner_name',
+        'owner_username',
     ];
 }

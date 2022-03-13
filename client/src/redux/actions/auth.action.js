@@ -10,13 +10,13 @@ export const userLogin = (userCredentials) => async (dispatch) => {
     axios
       .post(loginURL, userCredentials)
       .then((res) => {
-        const data = [
-          {
-            token: res.data.token,
-            username: res.data.user.username,
-            id: res.data.user.id,
-          },
-        ];
+        const data = {
+          token: res.data.token,
+          name: res.data.user.name,
+          username: res.data.user.username,
+          id: res.data.user.id,
+        };
+
         localStorage.setItem('auth_token', res.data.token);
         localStorage.setItem('auth_name', res.data.user.username);
         localStorage.setItem('user', JSON.stringify(res.data.user));
