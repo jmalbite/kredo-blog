@@ -21,7 +21,18 @@ const schema = yup.object().shape({
 
 const RegisterForm = () => {
   const methods = useForm({ resolver: yupResolver(schema) });
+  const registerResponse = useSelector((state) => state.registrationResponse);
+  const [takenUsername, setTakenUsername] = useState(false);
+  const [takenEmail, setTakenEmail] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+
+  //check if the email and username is taken from the response
+  useEffect(() => {
+    setIsLoading(false);
+    if (registerResponse.username) setTakenUsername(true);
+    if (registerResponse.email) setTakenEmail(true);
+  }, [registerResponse]);
 
   function clearFields() {
     methods.reset({
@@ -34,6 +45,9 @@ const RegisterForm = () => {
   }
 
   const registerAccount = (userInfo) => {
+    setIsLoading(true);
+    setTakenEmail(false);
+    setTakenUsername(false);
     dispatch(registerUser(userInfo));
   };
 
@@ -48,10 +62,20 @@ const RegisterForm = () => {
 
             <Grid item sm={12} lg={12}>
               <InputTextField label="Username" name="username" type="text" />
+              {takenUsername ? (
+                <Typography variant="subtitle2" color="red">
+                  username already taken
+                </Typography>
+              ) : null}
             </Grid>
 
             <Grid item sm={12} lg={12}>
               <InputTextField label="Email" name="email" type="email" />
+              {takenEmail ? (
+                <Typography variant="subtitle2" color="red">
+                  email already taken
+                </Typography>
+              ) : null}
             </Grid>
 
             <Grid item sm={12} lg={12}>
@@ -62,7 +86,7 @@ const RegisterForm = () => {
               <InputTextField label="Confirm password" name="password_confirmation" type="password" />
             </Grid>
 
-            {/* <Loader open={isLoading} /> */}
+            <Loader open={isLoading} />
             <Grid item sm={12} lg={12}>
               <Button type="submit" variant="contained" color="primary" fullWidth>
                 Register

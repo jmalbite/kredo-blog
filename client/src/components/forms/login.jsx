@@ -16,21 +16,20 @@ const schema = yup.object().shape({
 const LoginForm = () => {
   const methods = useForm({ resolver: yupResolver(schema) });
   const dispatch = useDispatch();
-  const isValid = useSelector((state) => state.errorLogin);
+  const response = useSelector((state) => state.loginResponse);
 
-  const [invalidCreds, setInvalidCreds] = useState(false);
+  const [validCredential, setValidCredential] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(false);
-    setInvalidCreds(isValid);
-  }, [isValid]);
+    if (response.message) setValidCredential(false);
+    else setValidCredential(true);
+  }, [response]);
 
   const loginAccount = (credentials) => {
-    dispatch(userLogin(credentials));
     setIsLoading(true);
-
-    if (invalidCreds) setIsLoading(false);
+    dispatch(userLogin(credentials));
   };
 
   return (
@@ -46,7 +45,7 @@ const LoginForm = () => {
               <InputTextField label="Password" name="password" type="password" />
             </Grid>
 
-            {invalidCreds ? (
+            {!validCredential ? (
               <Grid item sm={12} lg={12}>
                 <Typography variant="subtitle2" color="red">
                   username or password is not correct

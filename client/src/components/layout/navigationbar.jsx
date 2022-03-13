@@ -3,7 +3,7 @@ import { AppBar, Box, Toolbar, Typography, Button, IconButton, Dialog, DialogTit
 import CloseIcon from '@mui/icons-material/Close';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { userLogout, persistentLogin, resetLoginStatus } from '../../redux/actions/auth.action';
+import { userLogout, persistentLogin, resetRegistrationResponse } from '../../redux/actions/auth.action';
 
 import RegisterForm from '../forms/register';
 import LoginForm from '../forms/login';
@@ -33,6 +33,8 @@ const NavigationBar = () => {
   };
 
   const closeRegister = () => {
+    //clear response status
+    dispatch(resetRegistrationResponse());
     setRegister(false);
   };
 
@@ -50,7 +52,7 @@ const NavigationBar = () => {
 
   const handleClose = () => {
     setOpen(false);
-    dispatch(resetLoginStatus());
+    dispatch(resetRegistrationResponse());
   };
 
   const logoutUser = () => {

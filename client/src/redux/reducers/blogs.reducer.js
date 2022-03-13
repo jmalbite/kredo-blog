@@ -45,15 +45,28 @@ export const user = (user = null, action) => {
   }
 };
 
-export const errorLogin = (errorLogin = false, action) => {
+export const loginResponse = (response = [], action) => {
   switch (action.type) {
-    case actions.ERROR_LOGIN:
-      return action.payload.message === 'Invalid Credentials' ? (errorLogin = true) : null;
     case actions.SUCCESS_LOGIN:
-      return (errorLogin = false);
+      return (response = action.payload);
+    case actions.ERROR_LOGIN:
+      return (response = action.payload);
     case actions.RESET_STATUS:
-      return (errorLogin = false);
+      return (response = []);
     default:
-      return errorLogin;
+      return response;
+  }
+};
+
+export const registrationResponse = (response = [], action) => {
+  switch (action.type) {
+    case actions.REGISTER:
+      return (response = action.payload);
+    case actions.ERROR_REGISTER:
+      return (response = action.payload.data.errors);
+    case actions.RESET_STATUS:
+      return (response = []);
+    default:
+      return response;
   }
 };

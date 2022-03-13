@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { actions } from '../actionsconstant';
 
-const loginURL = '/api/login';
+const loginURL = 'http://localhost:8000/api/login';
+const registerURL = 'http://localhost:8000/api/register';
 const logoutURL = '/api/logout';
-const registerURL = '/api/register';
 
 export const userLogin = (userCredentials) => async (dispatch) => {
   axios.get('/sanctum/csrf-cookie').then((response) => {
@@ -20,9 +20,8 @@ export const userLogin = (userCredentials) => async (dispatch) => {
         localStorage.setItem('auth_token', res.data.token);
         localStorage.setItem('auth_name', res.data.user.username);
         localStorage.setItem('user', JSON.stringify(res.data.user));
-
+        dispatch({ type: actions.SUCCESS_LOGIN, payload: res.data.user });
         dispatch({ type: actions.USERLOGIN, payload: data });
-        dispatch({ type: actions.SUCCESS_LOGIN });
       })
       .catch((error) => {
         dispatch({ type: actions.ERROR_LOGIN, payload: error.response.data });
@@ -50,12 +49,10 @@ export const registerUser = (userInfo) => async (dispatch) => {
     axios
       .post(registerURL, userInfo)
       .then((res) => {
-        console.log('yey', res);
-        dispatch({ type: actions.REGISTER, payload: res.response.status });
-        dispatch({ type: actions.SUCCESS_LOGIN });
+        dispatch({ type: actions.REGISTER, payload: res });
       })
       .catch((err) => {
-        console.log(err.response.data);
+        dispatch({ type: actions.ERROR_REGISTER, payload: err.response });
       });
   });
 };
@@ -68,6 +65,12 @@ export const persistentLogin = (user) => {
 };
 
 export const resetLoginStatus = () => {
+  return {
+    type: actions.RESET_STATUS,
+  };
+};
+
+export const resetRegistrationResponse = () => {
   return {
     type: actions.RESET_STATUS,
   };
